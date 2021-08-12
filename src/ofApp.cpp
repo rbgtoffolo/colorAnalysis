@@ -5,9 +5,13 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
   myImage.load("teste200_duas_cores.jpg");
+  myImage.draw(0,0);
   analise = ColorAnalysis(myImage);
   analise.extractColors();
-  analise.printRowColors();
+
+  //analise.printClassifiedColors();
+  //analise.drawColors(0,0);
+
 }
 
 //--------------------------------------------------------------
@@ -17,8 +21,9 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-  //myImage.draw(0,0,1024,768);
-  analise.drawColors();
+   // myImage.draw(0,0);
+  analise.drawColors(0,0);
+
 
 
 }

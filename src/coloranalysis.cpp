@@ -1,10 +1,7 @@
 #include "coloranalysis.h"
 
 
-ColorAnalysis::ColorAnalysis()
-{
-
-}
+ColorAnalysis::ColorAnalysis(){} // Default constructor
 
 ColorAnalysis::ColorAnalysis(const ofImage &myImage)
 {
@@ -20,21 +17,26 @@ void ColorAnalysis::extractColors()
   int width = m_image.getWidth();
   int height = m_image.getHeight();
   int imageSize = width*height;
-  for  (int i = 0; i < imageSize; i++){
-      tempColor = m_image.getColor(i);
+  //int i = 0; // uncomment to use debug cout below
+  m_classifiedColors.reserve(imageSize);
+  for  (int y = 0; y < height; y++){
+      for (int x = 0; x < width; x++){
+      tempColor = m_image.getColor(x,y);
       int position = checkSimilarity(tempColor);
       if (position != -1)
         {
-          m_classifiedColors[position].push_back(tempColor);
+          m_classifiedColors[position].emplace_back(tempColor);
         }
       else
         {
           std::vector<ofColor> tempVector = {tempColor};
-          m_classifiedColors.push_back(tempVector);
+          m_classifiedColors.emplace_back(tempVector);
         }
+      //i++; // uncomment to use debug cout in next line
       //std::cout << "Pass: " << i << " of " << imageSize << std::endl;
       //std::cout << "pass: " << i << " of "<< imageSize << " - " << tempColor.getHue() << ", " << tempColor.getSaturation() << ", " << tempColor.getBrightness() << std::endl;
     }
+  }
 }
 
 int ColorAnalysis::checkSimilarity(const ofColor &pixelColor)
@@ -42,7 +44,7 @@ int ColorAnalysis::checkSimilarity(const ofColor &pixelColor)
   if (m_classifiedColors.empty())
     return -1;
 
-  std::vector<ofColor> tempVector;
+
   int tempH, tempS, tempB;
   int testH, testS, testB;
   int size = (int)m_classifiedColors.size();
@@ -52,6 +54,7 @@ int ColorAnalysis::checkSimilarity(const ofColor &pixelColor)
 
   for (int i = 0; i < size; i++)
     {
+      std::vector<ofColor> tempVector;
       tempVector = m_classifiedColors[i];
       for (auto it1 : tempVector)
         {
@@ -75,7 +78,7 @@ int ColorAnalysis::checkSimilarity(const ofColor &pixelColor)
 bool ColorAnalysis::checkItemSimilarity(int color1, int color2, int limit){
   bool result = false;
   // caso esteja no limite normal para comparar
-  if ( (color1 <= 255-limit && color1 >= limit) && (color2 <= 255-limit && color2 >= limit) ){
+  if ( (color1 < 255-limit && color1 > limit) && (color2 < 255-limit && color2 > limit) ){
       if ( abs(color2-color1) <= limit )
         result = true;
       else
@@ -83,7 +86,7 @@ bool ColorAnalysis::checkItemSimilarity(int color1, int color2, int limit){
     }
 
   // caso cor1 esteja na área de cálculo positivo e cor2 esteja nos extremos
-  if ( (color1 >= limit && color1 <= 255-limit) && ((color2 >= 0 && color2 <= limit) || (color2 >= 255-limit && color2 <= 255)) ){
+  if ( (color1 > limit && color1 < 255-limit) && ((color2 >= 0 && color2 <= limit) || (color2 >= 255-limit && color2 <= 255)) ){
       if (abs(color2-color1) <= limit)
         result = true;
       else
@@ -91,7 +94,7 @@ bool ColorAnalysis::checkItemSimilarity(int color1, int color2, int limit){
     }
 
   // caso cor1 esteja nos extremos e cor2 na área de cálculo positivo
-  if ( ((color1 >= 0 && color1 <= limit) || (color1 >= 255-limit && color1 <= 255)) && (color2 >= limit && color2 <= 255-limit)  ){
+  if ( ((color1 >= 0 && color1 <= limit) || (color1 >= 255-limit && color1 <= 255)) && (color2 > limit && color2 < 255-limit)  ){
       if (abs(color2-color1) <= limit)
         result = true;
       else
@@ -144,14 +147,15 @@ void ColorAnalysis::printClassifiedColors()
 
 void ColorAnalysis::printRowColors(){
   ofColor tempColor;
-  for  (int i = 0; i < m_image.getWidth()*m_image.getHeight(); i++){
-      tempColor = m_image.getColor(i);
+  for  (int y = 0; y < m_image.getWidth(); y++){
+      for (int x = 0; x < m_image.getHeight(); x++)
+      tempColor = m_image.getColor(x,y);
       std::cout << "H: " << tempColor.getHue() << ", S: " << tempColor.getSaturation() << ", B: " << tempColor.getBrightness() << std::endl;
     }
 
 }
 
-void ColorAnalysis::drawColors(){
+void ColorAnalysis::drawColors(int posX, int posY){
   ofImage tempImage;
   tempImage.allocate(m_image.getWidth(), m_image.getHeight(), OF_IMAGE_COLOR);
   int x=0, y=0, size = (int)m_classifiedColors.size();
@@ -172,5 +176,5 @@ void ColorAnalysis::drawColors(){
 
     }
   tempImage.update();
-  tempImage.draw(0,0);
+  tempImage.draw(posX, posY);
 }

@@ -24,7 +24,7 @@ public:
   void printSortedMap();
   void printClassifiedColors();
   void printRowColors();
-  void drawColors();
+  void drawColors(int x, int y);
 
 private:
   int m_hueLimit, m_satLimit, m_briLimit;
