@@ -1,4 +1,5 @@
 #include "coloranalysis.h"
+#include "progressbar.h"
 
 
 ColorAnalysis::ColorAnalysis(){} // Default constructor
@@ -9,15 +10,18 @@ ColorAnalysis::ColorAnalysis(const ofImage &myImage)
   m_hueLimit = 7; // deviation factor to consider a hue as a same color (+7, -7);
   m_satLimit = 20; // deviation factor to consider a saturation as a same color (+20, -20);
   m_briLimit = 20; // deviation factor to consider a brightness as a same color (+20, -20);
+
 }
+// TODO: correct algorithm error: Saturation and Brightness are not circular spaces!!!
 
 void ColorAnalysis::extractColors()
 {
   ofColor tempColor;
+  progressBar progress{std::clog, 70u, "Analysing"};
   int width = m_image.getWidth();
   int height = m_image.getHeight();
-  int imageSize = width*height;
-  //int i = 0; // uncomment to use debug cout below
+  float imageSize = (float)width*(float)height;
+  float i = 0; // uncomment to use debug cout below
   m_classifiedColors.reserve(imageSize);
   for  (int y = 0; y < height; y++){
       for (int x = 0; x < width; x++){
@@ -32,7 +36,9 @@ void ColorAnalysis::extractColors()
           std::vector<ofColor> tempVector = {tempColor};
           m_classifiedColors.emplace_back(tempVector);
         }
-      //i++; // uncomment to use debug cout in next line
+
+      i++; // uncomment to use debug cout in next line
+      progress.write(i/imageSize);
       //std::cout << "Pass: " << i << " of " << imageSize << std::endl;
       //std::cout << "pass: " << i << " of "<< imageSize << " - " << tempColor.getHue() << ", " << tempColor.getSaturation() << ", " << tempColor.getBrightness() << std::endl;
     }

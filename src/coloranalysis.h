@@ -6,6 +6,7 @@
 #include <vector>
 #include <iostream>
 
+
 class ColorAnalysis
 {
 public:

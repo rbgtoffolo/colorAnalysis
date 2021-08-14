@@ -4,12 +4,12 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-  myImage.load("teste200_duas_cores.jpg");
+  myImage.load("duasCores10_5.png");
   myImage.draw(0,0);
   analise = ColorAnalysis(myImage);
   analise.extractColors();
 
-  //analise.printClassifiedColors();
+  analise.printClassifiedColors();
   //analise.drawColors(0,0);
 
 }

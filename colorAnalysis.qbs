@@ -12,11 +12,12 @@ Project{
         name: { return FileInfo.baseName(sourceDirectory) }
 
         files: [
+            "src/progressbar.h",
             'src/main.cpp',
             'src/ofApp.cpp',
             'src/ofApp.h',
             'src/coloranalysis.cpp',
-            'src/coloranalysis.h'
+            'src/coloranalysis.h',
         ]
 
         of.addons: [
