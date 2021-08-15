@@ -4,13 +4,13 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-  myImage.load("duasCores10_5.png");
+  myImage.load("lucianaMonotipia200.png");
   myImage.draw(0,0);
-  analise = ColorAnalysis(myImage);
-  analise.extractColors();
+ analise = ColorAnalysis(myImage);
+ analise.extractColors();
 
-  analise.printClassifiedColors();
-  //analise.drawColors(0,0);
+ analise.printClassifiedColors();
+  analise.drawColors(0,0);
 
 }
 
@@ -22,7 +22,7 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
    // myImage.draw(0,0);
-  analise.drawColors(0,0);
+ analise.drawColors(0,0);
 
 
 

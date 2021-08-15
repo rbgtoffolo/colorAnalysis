@@ -13,9 +13,9 @@ public:
   ColorAnalysis();
   ColorAnalysis(const ofImage& myImage);
   void extractColors();
-  void setHueLimit(int limit){m_hueLimit = limit;};
-  void setSaturationLimit(int limit){m_satLimit = limit;};
-  void setBrightnessLimit(int limit){m_briLimit = limit;};
+  void setHueLimit(float limit){m_hueLimit = limit;};
+  void setSaturationLimit(float limit){m_satLimit = limit;};
+  void setBrightnessLimit(float limit){m_briLimit = limit;};
   int getHueLimit(){return m_hueLimit;};
   int getSaturationLimit(){return m_satLimit;};
   int getBrightnessLimit(){return m_briLimit;};
@@ -27,11 +27,12 @@ public:
   void printRowColors();
   void drawColors(int x, int y);
 
-private:
-  int m_hueLimit, m_satLimit, m_briLimit;
-  int checkSimilarity(const ofColor &pixelColor);
-  bool checkItemSimilarity(int color1, int color2, int limit);
 
+private:
+  float m_hueLimit, m_satLimit, m_briLimit;
+  int checkSimilarity(const ofColor &pixelColor);
+  bool checkHueSimilarity(float color1, float color2, float limit);
+  bool checkSatBriSimilarity(float color1, float color2, float limit);
 
 private:
   std::vector<std::vector<ofColor>> m_classifiedColors;
